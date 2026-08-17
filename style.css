@@ -1,0 +1,219 @@
+/* =========================================================
+   元智校園 GPS + Wi-Fi 室內定位系統 — 樣式表
+   只負責外觀與排版；不含任何邏輯。
+   所有 id（map / trackButton / trackStatus / locationButton /
+   result / currentPosition / indoorLocation / notificationLog /
+   simulateBuildingSelect）都未被改動。
+   ========================================================= */
+
+:root {
+  --bg:        #f0eee9;
+  --surface:   #ffffff;
+  --surface-2: #fbfaf7;
+  --ink:       #1a1a1a;
+  --ink-2:     #555555;
+  --ink-3:     #888888;
+  --line:      rgba(0, 0, 0, 0.10);
+  --accent:    #2a78d6;
+  --accent-bg: rgba(42, 120, 214, 0.10);
+  --radius:    14px;
+  --gap:       14px;
+  --font:      "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono:      ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--accent); }
+a:hover { color: #1a5aa8; }
+
+/* ---------- 頁首 ---------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 14px 10px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.app-header h1 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.app-header__badge {
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  padding: 5px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* ---------- 版面骨架：手機單欄、桌機兩欄（地圖左、資訊右） ---------- */
+.app-main {
+  display: grid;
+  gap: var(--gap);
+  padding: 4px 14px 32px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.col { display: flex; flex-direction: column; gap: var(--gap); min-width: 0; }
+
+@media (min-width: 900px) {
+  .app-main { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; }
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 16px 15px;
+}
+.card__title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.card__title--sm { font-size: 12px; }
+.card__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+}
+
+/* 主卡：目前位置 */
+.card--hero {
+  background: var(--surface-2);
+  padding: 18px 16px;
+}
+.hero-place {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: pretty;
+  word-break: break-word;
+}
+/* renderIndoorLocation() 產生的細節文字自動降級為輔助資訊 */
+.hero-place :is(small, span, em, p, div:not(:first-child)) {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--ink-2);
+  letter-spacing: 0;
+}
+.hero-place :is(h1, h2, h3, h4, strong, b) {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+.hero-place:empty::before {
+  content: "尚未取得室內定位";
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.btn {
+  flex: 1;
+  min-height: 46px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .08s ease, opacity .15s ease;
+}
+.btn:active { transform: scale(0.98); }
+.btn--primary { background: var(--ink); color: #fff; border: 2px solid var(--ink); }
+.btn--ghost   { background: transparent; color: var(--ink); border: 2px solid var(--ink); }
+.btn--ghost:hover { background: rgba(0, 0, 0, 0.04); }
+
+.status-line {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 8px;
+}
+.status-line:empty { display: none; }
+
+/* 地圖 */
+.card--map { padding: 0; overflow: hidden; }
+#map {
+  height: 320px;
+  width: 100%;
+  background: repeating-linear-gradient(45deg, #eceae4 0 10px, #f4f2ed 10px 20px);
+}
+@media (min-width: 900px) { #map { height: 480px; } }
+
+/* 通知紀錄 */
+.log { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.log > * {
+  padding: 8px 0 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
+}
+.log > *:first-child { border-top: 0; padding-top: 0; }
+.log:empty::before { content: "目前沒有通知紀錄"; font-size: 13px; color: var(--ink-3); }
+
+/* 分隔標題 */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+.section-divider span {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* 詳細資料卡 */
+.card--data {
+  background: transparent;
+  border: 2px dashed rgba(0, 0, 0, 0.18);
+  box-shadow: none;
+}
+.data-body { font-size: 12px; color: var(--ink-2); }
+.data-body > * { padding: 5px 0; border-top: 1px solid var(--line); }
+.data-body > *:first-child { border-top: 0; }
+.data-body :is(span, b, strong) { font-family: var(--mono); color: var(--ink); }
+.data-body:empty::before { content: "尚未取得 GPS 座標"; color: var(--ink-3); }
+
+/* 開發測試用區塊：保留 HTML 與 JS，畫面上不顯示 */
+.is-dev-hidden { display: none; }

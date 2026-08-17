@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元智校園 GPS + Wi-Fi 室內定位系統</title>
+
+    <!-- Leaflet 地圖套件 -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Firebase compat SDK（配合舊版全域寫法 firebase.xxx） -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
+
+    <!-- 你自己的樣式 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>元智校園 GPS + Wi-Fi 室內定位系統</h1>
+
+    <!-- ① GPS 追蹤控制區：對應 app.js 的 toggleTracking()/trackButton/trackStatus -->
+    <section id="trackingSection">
+        <button id="trackButton" onclick="toggleTracking()">開始追蹤我的位置</button>
+        <div id="trackStatus"></div>
+    </section>
+
+    <!-- ② 地圖：對應 map.js 的 initMap()，容器 id 一定要叫 "map" -->
+    <section id="mapSection">
+        <div id="map" style="height: 400px;"></div>
+    </section>
+
+    <!-- ③ 單次定位查詢：對應 app.js 的 getLocation()/result -->
+    <section id="locationSection">
+        <button id="locationButton" onclick="getLocation()">確認我的位置</button>
+        <div id="result"></div>
+    </section>
+
+    <!-- ④ GPS 目前座標顯示：對應 app.js 的 updateCurrentPosition()/currentPosition -->
+    <section id="currentPositionSection">
+        <div id="currentPosition"></div>
+    </section>
+
+    <!-- ⑤ Wi-Fi 室內定位結果：對應 indoor-location.js 的 renderIndoorLocation()/indoorLocation -->
+    <section id="indoorSection">
+        <div id="indoorLocation"></div>
+    </section>
+
+    <!-- ⑥ 模擬抵達通知（測試用）：對應 app.js 的 setupSimulationSelector()/simulateBuildingSelect -->
+    <section id="simulateSection">
+        <select id="simulateBuildingSelect"></select>
+        <button onclick="simulateSelectedArrivalNotification()">模擬抵達通知</button>
+    </section>
+
+    <!-- ⑦ 通知紀錄：對應 app.js 的 renderNotificationLog()/notificationLog -->
+    <section id="notificationSection">
+        <h2>通知紀錄</h2>
+        <div id="notificationLog"></div>
+    </section>
+
+    <!-- =========================================
+         JS 引入區，順序很重要，前面的變數/函式
+         要先存在，後面的檔案才能使用
+         ========================================= -->
+    <script src="firebase-config.js"></script>
+    <script src="buildings.js"></script>
+    <script src="geofence.js"></script>
+    <script src="map.js"></script>
+    <script src="app.js"></script>
+    <script src="indoor-location.js"></script>
+
+</body>
+</html>
