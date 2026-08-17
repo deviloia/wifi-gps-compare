@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元智校園 GPS + Wi-Fi 室內定位系統</title>
+
+    <!-- Leaflet 地圖套件 -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Firebase compat SDK（配合舊版全域寫法 firebase.xxx） -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
+
+    <!-- 你自己的樣式 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 頁首：對應 style.css 的 .app-header -->
+    <header class="app-header">
+        <h1>元智校園 GPS + Wi-Fi 室內定位系統</h1>
+        <span class="app-header__badge">元智大學</span>
+    </header>
+
+    <!-- 主要版面：手機單欄、桌機兩欄（.app-main 是 grid 容器） -->
+    <main class="app-main">
+
+        <!-- 左欄：定位結果 + 地圖 -->
+        <div class="col">
+
+            <!-- 目前位置主卡：對應 indoor-location.js 的 renderIndoorLocation()/indoorLocation -->
+            <section class="card card--hero">
+                <div class="card__eyebrow">目前位置</div>
+                <div id="indoorLocation" class="hero-place"></div>
+
+                <!-- GPS 追蹤 + 單次定位按鈕：對應 app.js 的 toggleTracking() / getLocation() -->
+                <div class="hero-actions">
+                    <button id="trackButton" class="btn btn--primary" onclick="toggleTracking()">開始追蹤我的位置</button>
+                    <button id="locationButton" class="btn btn--ghost" onclick="getLocation()">確認我的位置</button>
+                </div>
+                <div id="trackStatus" class="status-line"></div>
+                <div id="result" class="status-line"></div>
+            </section>
+
+            <!-- 地圖：對應 map.js 的 initMap()，容器 id 一定要叫 "map" -->
+            <section class="card card--map">
+                <div id="map"></div>
+            </section>
+
+        </div>
+
+        <!-- 右欄：GPS 座標細節 + 通知紀錄 -->
+        <div class="col">
+
+            <!-- GPS 座標詳細資料：對應 app.js 的 updateCurrentPosition()/currentPosition -->
+            <section class="card card--data">
+                <div class="card__title card__title--sm">GPS 座標</div>
+                <div id="currentPosition" class="data-body"></div>
+            </section>
+
+            <div class="section-divider"><span>通知紀錄</span></div>
+
+            <!-- 通知紀錄：對應 app.js 的 renderNotificationLog()/notificationLog -->
+            <section class="card">
+                <div id="notificationLog" class="log"></div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- =========================================
+         JS 引入區，順序很重要，前面的變數/函式
+         要先存在，後面的檔案才能使用
+         ========================================= -->
+    <script src="firebase-config.js"></script>
+    <script src="buildings.js"></script>
+    <script src="geofence.js"></script>
+    <script src="map.js"></script>
+    <script src="app.js"></script>
+    <script src="indoor-location.js"></script>
+
+</body>
+</html>
